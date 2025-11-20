@@ -1,4 +1,4 @@
-id = "bsv"
+id = "bluespec-systemverilog"
 name = "Bluespec SystemVerilog"
 description = "Bluespec SystemVerilog (BSV) language support"
 version = "0.1.0"

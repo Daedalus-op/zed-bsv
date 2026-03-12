@@ -1,132 +1,113 @@
-; Keywords
 [
-  "package"
-  "endpackage"
-  "import"
-  "export"
-  "module"
-  "endmodule"
-  "interface"
-  "endinterface"
-  "typedef"
-  "struct"
-  "enum"
+  "action" "actionvalue"
+  "begin" "clocked_by" "default"
+  "dependencies" "deriving" "determines"
+  "end" "enum" "instance" "interface"
+  "let" "match" "matches" "method" "module"
+  "numeric" "package" "seq" "par" "parameter"
+  "endaction" "endactionvalue" "endcase"
+  "endinstance" "endinterface" "endmethod"
+  "endmodule" "endpackage" "endseq" "endpar"
+  "provisos" "reset_by" "rules" "endrules"
+  "struct" "tagged" "type" "typeclass"
+  "endtypeclass" "union"
 ] @keyword
 
-[
-  "method"
-  "endmethod"
-  "function"
-  "endfunction"
-  "rule"
-  "endrule"
-] @keyword.function
+[ "\"BDPI\"" ] @string
+
+; @keyword.import
+[ "import" "export" ] @keyword
+
+; @keyword.definition
+"typedef" @keyword
+
+; @keyword.repeat
+[ "while" "for" "continue" "break" ] @keyword
+
+; @keyword.conditional
+[ "if" "else" "case" ] @keyword
+
+; @keyword.function
+[ "function" "endfunction" "rule" "endrule" ] @keyword
+
+; @keyword.return
+"return" @keyword
+
+; @type.builtin
+[ "bit" "int" "Action" "ActionValue" "void" ] @type
+
+; @boolean
+[ "True" "False" ] @constant
 
 [
-  "if"
-  "else"
-  "case"
-  "endcase"
-  "default"
-] @keyword.control.conditional
-
-"for" @keyword.control.repeat
-
-[
-  "begin"
-  "end"
-] @keyword.control
-
-"return" @keyword.control.return
-
-; Built-in types
-(primitive_type) @type.builtin
-
-; Type nodes (for debugging - highlight entire type expression)
-(type) @type
-
-; Boolean literals
-[
-  "True"
-  "False"
-] @constant.builtin.boolean
-
-; Operators
-[
-  "="
-  "<="
-  "+"
-  "-"
-  "*"
-  "/"
-  "%"
-  "=="
-  "!="
-  "<"
-  ">"
-  ">="
-  "&&"
-  "||"
-  "!"
-  "&"
-  "|"
-  "^"
-  "~"
-  "<<"
-  ">>"
+  "+" "-" "!" "~" "&" "~&" "|" "~|"
+  "^" "^~" "~^" "*" "/" "%" "<<" ">>"
+  "<=" ">=" "<" ">" "==" "!=" "&&" "||"
+  "=" "<-" "&&&"
 ] @operator
 
-; Punctuation
-[
-  "("
-  ")"
-  "{"
-  "}"
-  "["
-  "]"
-] @punctuation.bracket
+; @keyword.operator → @keyword
+[ "matches" "valueOf" "valueof" "noAction" ] @keyword
 
-[
-  ","
-  ";"
-  ":"
-  "."
-] @punctuation.delimiter
+"?" @constant
 
-"::" @punctuation.delimiter
+[ ";" ":" "," "::" ] @punctuation.delimiter
+[ "(" ")" "[" "]" "{" "}" ] @punctuation.bracket
+
+; @operator ternary
+(condExpr [ "?" ":" ] @operator)
+
+(typeIde) @type
+
+(typeNat) @type
 
 ; Comments
 (comment) @comment
 
-; Numbers
-(number) @constant.numeric
+(intLiteral) @number
+(realLiteral) @number
+(stringLiteral) @string
 
-; Strings
-(string) @string
+; @property stays as @property
+(exprPrimary "." (identifier) @property)
+(lValue "." (identifier) @property)
 
-; Boolean
-(boolean) @constant.builtin.boolean
+(exprPrimary (Identifier) @constant)
 
-; Function/Method/Rule names
-(function_declaration
-  name: (identifier) @function)
+(structMember (identifier) @property)
+(unionMember (Identifier) @property)
 
-(method_declaration
-  name: (identifier) @function.method)
+(structExpr (Identifier) @type)
+(taggedUnionExpr . (Identifier) @type)
+(taggedUnionPattern (Identifier) @type)
 
-(rule_declaration
-  name: (identifier) @function)
+(memberBind . (identifier) @property)
+(typedefEnum (Identifier) @type)
+(typedefEnumElement (Identifier) @constant)
+(attrName (identifier) @property)
 
-; Module/Interface names
-(module_declaration
-  name: (identifier) @type)
+; @parameter → @variable
+(typeFormal (typeIde (identifier) @variable))
+(moduleFormalParam (identifier) @variable)
+(functionFormal (identifier) @variable)
+(methodProtoFormal (identifier) @variable)
+(methodFormal (identifier) @variable)
 
-(interface_declaration
-  name: (identifier) @type)
+(subinterfaceDef . (Identifier) @type)
+(typeclassIde) @type
+(proviso (Identifier) @type)
 
-; Package name
-(package_declaration
-  name: (identifier) @namespace)
+(moduleProto (identifier) @type)
+(moduleApp (identifier) @type)
 
-; Identifiers (general - keep this at the end)
-(identifier) @variable
+(functionProto (identifier) @function)
+(functionAssign (identifier) @function)
+
+; @function.call → @function
+(functionCall (exprPrimary (identifier) @function))
+(systemTaskStmt (displayTaskName) @function)
+(systemTaskStmt (dollarIdentifier) @function)
+(systemFunctionCall) @function
+
+(methodProto (identifier) @function)
+(methodDef (identifier) @function)
